@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>welcome</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script type="text/javascript" src="{% static 'myscript.js' %}" ></script>
+</head>
+<body>
+    <div class="d1 left">
+        <center><h3 >Write your Code   Here</h3></center>
+        <form method="post">{% csrf_token %}
+            <textarea cols="70" rows="22" name="data" class="text"  onkeydown="insertTab(this, event);">{{formdata}}</textarea>
+            <button type="submit" class="left" name="action" value="save">Save</button>
+            <button type="submit" class="right" name="action" value="run">Run</button>
+        </form>
+
+    </div>
+
+    <div class="d2 right">
+        <center><h3>Your Output</h3></center><hr>
+        <div class="inner-div">
+            {% if form %}
+                {% for field in form %}
+                    <label>{{ field.label_tag }}</label>{{ field }}<br>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
