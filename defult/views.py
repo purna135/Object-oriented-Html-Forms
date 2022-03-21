@@ -6,24 +6,27 @@ from multiprocessing import Process
 
 
 def indexview(request):
-    if request.method == "POST":
-        data = request.POST['data']
-
-        if request.POST['action'] == 'save':
-            savedata(data)
-            return render(request, 'index.html', {'formdata': data})
-        elif request.POST['action'] == 'run':
-            form = getobj()
-            return render(request, 'index.html', {'form':form, 'formdata':data})
-    else:
+    if request.method != "POST":
         return render(request, 'index.html')
+    data = request.POST['data']
+
+    if request.POST['action'] == 'save':
+        savedata(data)
+        return render(request, 'index.html', {'formdata': data})
+    elif request.POST['action'] == 'run':
+        form = getobj()
+        return render(request, 'index.html', {'form':form, 'formdata':data})
 
 
 def getobj():
-    for name, obj in inspect.getmembers(forms):
-        if inspect.isclass(obj):
-            return obj
-    return None
+    return next(
+        (
+            obj
+            for name, obj in inspect.getmembers(forms)
+            if inspect.isclass(obj)
+        ),
+        None,
+    )
 
 def savedata(data):
     with open('defult/forms.py', 'w', newline='') as f:
